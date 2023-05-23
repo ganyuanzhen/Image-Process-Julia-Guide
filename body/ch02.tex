@@ -1,0 +1,65 @@
+\chapter{一个简单的UVM验证平台}\label{ch2}
+
+\section{验证平台的组成}\label{sec2-1}
+
+验证用于找出DUT中的bug，这个过程通常是把DUT放入一个验证平台中来实现的。一个验证平台要实现如下基本功能：
+
+\begin{enumerate}
+	\item 验证平台要模拟DUT的各种真实使用情况，这意味着要给DUT施加各种激励，有正常的激励，也有异常的激励；有这种模式的激励，也有那种模式的激励。激励的功能是由driver来实现的。
+	\item 验证平台要能够根据DUT的输出来判断DUT的行为是否与预期相符合，完成这个功能的是记分板（scoreboard，也被称为checker，本书统一以scoreboard来称呼）。既然是判断，那么牵扯到两个方面。一是判断什么，需要把什么拿来判断，这里很明显是DUT的输出；二是判断的标准是什么。
+\end{enumerate}
+
+在UVM中，引入了agent和sequence的概念，因此UVM中验证平台的典型框图如图\ref{UVM typical testbench}所示。
+
+\begin{figure}[!htb]
+	\centering%\captionsetup{font={small}} %small or scriptsize
+	\tikzstyle{every node}=[on grid, align = center, font=\normalsize, node distance=1 and 2]
+	\tikzstyle{rec} = [draw,thick,minimum height=0.6cm,minimum width=1.8cm]
+	\scalebox{0.9}{
+	\begin{tikzpicture}
+		%\draw[thick,draw=gray] (-3,-5) grid (8,1);
+		%\node (Transaction) [rec,color=red] {Transaction};
+		\node (ref) [rec,color=blue,minimum width=3.5cm] {reference model};
+		\node (sequencer) [rec,color=blue,below left=2.0 and 1.0 of ref] {sequencer};
+		\node (driver) [rec,color=blue,below=of sequencer] {driver};
+		\node (monitor1) [rec,color=blue,right=of driver] {monitor};
+
+		\node (scoreboard) [rec,color=blue,minimum width=3.5cm,right=5.0 of ref] {scoreboard};
+		\node (monitor2) [rec,color=blue,below right=3.0 and 6.0 of ref] {monitor};
+
+		\node (in_agent) [rec,color=blue,below right=0.5 and 1.0 of sequencer,minimum height=2.2cm,minimum width=4.6cm] {};
+		\node (out_agent) [rec,color=blue,above left=0.5 and 1.0 of monitor2,minimum height=2.2cm,minimum width=4.6cm] {};
+
+		\node (in_agent_text) [color=blue,right=of sequencer] {in\_agent};
+		\node (out_agent_text) [minimum height=0.6cm,minimum width=1.8cm,color=blue,above=of monitor2] {out\_agent};
+
+		\node (env) [rec,color=blue,below right=1.5 and 2.5 of ref,minimum height=5.2cm,minimum width=10.8cm] {};
+		\node (env_text) [color=blue,above right=2.2 and 4.0 of env] {env};
+		\node (DUT) [rec,dotted,color=blue,below =3.3 of env] {DUT};
+
+		\draw[thick,-Latex] (in_agent) -- (ref);
+		\draw[thick,-Latex] (ref) -- (scoreboard);
+		\draw[thick,-Latex] (out_agent) -- (scoreboard);
+		
+		\draw[thick,-Latex] (driver) |- (DUT);
+		\node (DOT) [circle,draw,fill=black,scale=0.4,below =1.8 of monitor1] {};
+		\draw[thick,-Latex] (DOT) -- (monitor1);
+		\draw[thick,-Latex] (DUT) -| (monitor2);
+	\end{tikzpicture}
+	}
+	\caption{简单验证平台框图}\label{UVM typical testbench}
+\end{figure}
+
+从下一节开始，将从只有一个driver的最简单的验证平台开始，一步一步搭建如图\ref{UVM typical testbench}所示的验证平台。
+
+\section{只有driver的验证平台}\label{sec2-2}
+driver是验证平台最基本的组件，是整个验证平台数据流的源泉。本节以一个简单的DUT为例，搭建一个只有driver的UVM验证平台。
+
+\subsection{最简单的验证平台}\label{subsec2-2-1}
+在本章中，假设有如下的DUT定义\footnote{如果例子的标题为文件名及路径，表明此段代码可以从本书的源码包中找到。}：
+
+\lstinputlisting[language=SystemVerilog, caption=\lstname,numbers=left,label=code2-1]{src/ch02/dut/dut.sv}
+
+UVM验证平台中的driver应该派生自uvm\_driver，一个简单的driver如下例所示：
+
+\lstinputlisting[language=SystemVerilog, caption=\lstname,numbers=left,linerange={4-24},consecutivenumbers=false,label=code2-2]{src/ch02/add_driver/my_driver.sv}

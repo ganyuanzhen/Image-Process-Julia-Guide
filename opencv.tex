@@ -1,0 +1,67 @@
+\documentclass[lang=cn,newtx,11pt,scheme=chinese,citestyle=gb7714-2015,bibstyle=gb7714-2015]{elegantbook}
+
+% 发行日期
+\newcommand{\releasedate}{2023/5/23}
+
+\title{OpenCV轻松入门——基于Julia}
+\subtitle{卷I}
+
+\author{甘元震}
+\institute{西南交通大学}
+\date{\releasedate}
+\version{0.0.1}
+% \bioinfo{自定义}{王旭修订}
+
+\extrainfo{未经许可，不得用于商业用途！}
+
+% 重定义编号
+\setcounter{tocdepth}{3}
+
+\logo{logo.jpg}
+\cover{figure/cover.png}
+
+% 本文档命令
+\usepackage{array}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+
+% 修改标题页的橙色带
+\definecolor{customcolor}{RGB}{32,178,170}
+\colorlet{coverlinecolor}{customcolor}
+\usepackage{cprotect}
+
+\addbibresource[location=local]{reference.bib} % 参考文献，不要删除
+
+\begin{document}
+
+\maketitle
+\frontmatter
+
+%\include{body/brief_introduction}
+\include{body/preface}
+
+\tableofcontents
+
+\mainmatter
+
+%\include{body/ch01}
+\include{body/ch02}
+%\include{body/ch03}
+%\include{body/ch04}
+%\include{body/ch05}
+%\include{body/ch06}
+%\include{body/ch07}
+%\include{body/ch08}
+%\include{body/ch09}
+%\include{body/ch10}
+%\include{body/ch11}
+
+%\appendix
+%\include{body/appendixa}
+%\include{body/appendixb}
+%\include{body/appendixc}
+%\include{body/appendixd}
+
+%\nocite{*}
+%\printbibliography[heading=bibintoc, title=\ebibname]
+
+\end{document}
