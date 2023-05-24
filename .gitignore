@@ -3,6 +3,7 @@ _minted-elegantbook-cn/
 *.acn
 *.acr
 *.alg
+*.aux
 *.aux/s
 *.bak
 *.bbl
