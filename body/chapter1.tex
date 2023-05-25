@@ -25,57 +25,62 @@ Julia 是一个非常棒的科学计算语言。它像 R、MATLAB 和 Python 一
     \item 直接调用 C 函数，无需封装或调用特别的 API
 \end{itemize}
 
-在UVM中，引入了agent和sequence的概念，因此UVM中验证平台的典型框图如图\ref{UVM typical testbench}所示。
+\section{Julia一键安装}\label{sec1-2}
 
-\begin{figure}[!htb]
-	\centering%\captionsetup{font={small}} %small or scriptsize
-	\tikzstyle{every node}=[on grid, align = center, font=\normalsize, node distance=1 and 2]
-	\tikzstyle{rec} = [draw,thick,minimum height=0.6cm,minimum width=1.8cm]
-	\scalebox{0.9}{
-	\begin{tikzpicture}
-		%\draw[thick,draw=gray] (-3,-5) grid (8,1);
-		%\node (Transaction) [rec,color=red] {Transaction};
-		\node (ref) [rec,color=blue,minimum width=3.5cm] {reference model};
-		\node (sequencer) [rec,color=blue,below left=2.0 and 1.0 of ref] {sequencer};
-		\node (driver) [rec,color=blue,below=of sequencer] {driver};
-		\node (monitor1) [rec,color=blue,right=of driver] {monitor};
+\href{https://julialang.org/downloads/}{Julia官网}的下载通常较慢，所以这里推荐大家从国内的镜像下载~
 
-		\node (scoreboard) [rec,color=blue,minimum width=3.5cm,right=5.0 of ref] {scoreboard};
-		\node (monitor2) [rec,color=blue,below right=3.0 and 6.0 of ref] {monitor};
+对于习惯命令行的用户而言，jill.py 是一个社区维护的全平台下一键安装 Julia 的命令行工具。
 
-		\node (in_agent) [rec,color=blue,below right=0.5 and 1.0 of sequencer,minimum height=2.2cm,minimum width=4.6cm] {};
-		\node (out_agent) [rec,color=blue,above left=0.5 and 1.0 of monitor2,minimum height=2.2cm,minimum width=4.6cm] {};
+\begin{itemize}
+    \item 安装/更新 jill： pip install jill --user -U (需要 Python 3.6 或更新的版本)
 
-		\node (in_agent_text) [color=blue,right=of sequencer] {in\_agent};
-		\node (out_agent_text) [minimum height=0.6cm,minimum width=1.8cm,color=blue,above=of monitor2] {out\_agent};
+    \item 安装 Julia：jill install [VERSION] [--upstream UPSTREAM] [--confirm]
 
-		\node (env) [rec,color=blue,below right=1.5 and 2.5 of ref,minimum height=5.2cm,minimum width=10.8cm] {};
-		\node (env_text) [color=blue,above right=2.2 and 4.0 of env] {env};
-		\node (DUT) [rec,dotted,color=blue,below =3.3 of env] {DUT};
+    \item jill install：最新的 x.y.z 版本
 
-		\draw[thick,-Latex] (in_agent) -- (ref);
-		\draw[thick,-Latex] (ref) -- (scoreboard);
-		\draw[thick,-Latex] (out_agent) -- (scoreboard);
+    \item jill install --confirm：无需交互确认直接安装
 
-		\draw[thick,-Latex] (driver) |- (DUT);
-		\node (DOT) [circle,draw,fill=black,scale=0.4,below =1.8 of monitor1] {};
-		\draw[thick,-Latex] (DOT) -- (monitor1);
-		\draw[thick,-Latex] (DUT) -| (monitor2);
-	\end{tikzpicture}
-	}
-	\caption{简单验证平台框图}\label{UVM typical testbench}
-\end{figure}
+    \item jill install --upstream BFSU：从北外镜像下载并安装
 
-从下一节开始，将从只有一个driver的最简单的验证平台开始，一步一步搭建如图\ref{UVM typical testbench}所示的验证平台。
+    \item jill install 1.4：安装最新的 1.4.z 版本
 
-\section{只有driver的验证平台}\label{sec2-2}
-driver是验证平台最基本的组件，是整个验证平台数据流的源泉。本节以一个简单的DUT为例，搭建一个只有driver的UVM验证平台。
+    \item 查询现存的上游镜像：jill upstream
 
-\subsection{最简单的验证平台}\label{subsec2-2-1}
-在本章中，假设有如下的DUT定义\footnote{如果例子的标题为文件名及路径，表明此段代码可以从本书的源码包中找到。}：
+    \item 帮助文档：jill [COMMAND] --help
 
-\lstinputlisting[language=SystemVerilog, caption=\lstname,numbers=left,label=code2-1]{src/ch02/dut/dut.sv}
+    \item jill --help：查询存在的 jill 命令
 
-UVM验证平台中的driver应该派生自uvm\_driver，一个简单的driver如下例所示：
+    \item jill install --help：查询 install 命令的使用方式
+\end{itemize}
 
-\lstinputlisting[language=SystemVerilog, caption=\lstname,numbers=left,linerange={4-24},consecutivenumbers=false,label=code2-2]{src/ch02/add_driver/my_driver.sv}
+利用 jill 安装完成后即可通过在命令行执行 julia/julia-1/julia-1.4 来启动不同版本的 Julia。
+
+使用镜像站来加速下载几乎是每个国内用户都需要了解的事情，关于镜像站的使用说明及汇总可以在 \href{https://discourse.juliacn.com/t/topic/2969}{Julia PkgServer 镜像服务及镜像站索引 }中可以看到。
+
+接下来的语法介绍基本来自于这里\cite{Julia2023}。没有基础的的读者可以先阅读这一部分~
+
+\section{Julia语法基础}\label{sec1-3}
+
+在本节，会简单介绍Julia的语法基础，比如变量、字符串、函数、流程控制等等。更深层次的用法请阅读Julia的文档 。
+
+\subsection{变量}\label{sec1-3-1}
+
+Julia 语言中，变量是与某个值相关联（或绑定）的名字。你可以用它来保存一个值（例如某些计算得到的结果），供之后的代码使用。例如：
+
+\begin{GitExampla}{Julia@xubuntu:$\sim$}
+    # 将 10 赋值给变量 x
+    julia> x = 10
+    10
+
+    # 使用 x 的值做计算
+    julia> x + 1
+    11
+
+    # 重新给 x 赋值
+    julia> x = 1 + 1
+    2
+
+    # 也可以给 x 赋其它类型的值, 比如字符串文本
+    julia> x = "Hello World!"
+    "Hello World!"
+\end{GitExampla}

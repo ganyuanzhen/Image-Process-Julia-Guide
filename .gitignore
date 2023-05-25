@@ -1,4 +1,4 @@
-_minted-elegantbook-cn/
+_minted-opencv/
 *.bib.sav
 *.pdf
 *.acn
@@ -41,3 +41,4 @@ _minted-elegantbook-cn/
 *.vrb
 *.xdv
 *.xml
+*.listing

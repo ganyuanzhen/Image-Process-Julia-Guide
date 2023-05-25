@@ -1,7 +1,114 @@
 \documentclass[lang=cn,newtx,11pt,scheme=chinese,citestyle=gb7714-2015,bibstyle=gb7714-2015]{elegantbook}
 
+% tcolorbox
+\tcbuselibrary{skins, listings, xparse, breakable}
+\definecolor{termimal}{RGB}{80,78,70}
+\usepackage{fontawesome}
+\definecolor{linux}{RGB}{0,39,51}
+
+\newcommand{\UbuntuMin}{%
+    \begin{tikzpicture}[x=2.4ex,y=2.4ex,line width=0.15ex,scale=1]
+        \fill[gray!80](0,0) circle (0.5);
+        \draw[termimal](-0.3,0)--(0.3,0);
+    \end{tikzpicture}
+}
+\newcommand{\UbuntuClose}{%
+    \begin{tikzpicture}[x=2.4ex,y=2.4ex,line width=0.15ex,scale=1]
+        \fill[orange](0,0) circle (0.5);
+        \draw[termimal](-0.25,-0.25)--(0.25,0.25);
+        \draw[termimal](-0.25,0.25)--(0.25,-0.25);
+    \end{tikzpicture}
+}
+\newcommand{\UbuntuMax}{%
+    \begin{tikzpicture}[x=2.4ex,y=2.4ex,line width=0.15ex,scale=1]
+        \fill[gray!80](0,0) circle (0.5);
+        \draw[termimal](-0.25,-0.2)rectangle(0.25,0.2);
+    \end{tikzpicture}
+}
+
+\tcbset{skin=enhanced,
+    gitexample/.style={
+        halign title=center,
+        %comment={#1},
+        skin=bicolor,
+        boxrule=1mm,
+        fonttitle=\bfseries,
+        coltitle=linux,
+        frame style={draw=linux,left color=termimal,right color=termimal},
+        colback=linux,
+        colupper=white,
+        breakable,
+        colframe=termimal,
+        colbacktitle=termimal,
+        listing engine=minted,
+        minted style=trac,
+        minted language=bash,
+        minted options={autogobble,breaklines,fontsize=\wuhao,numbersep=3mm},
+        overlay unbroken={
+            \node[inner sep=0pt,anchor=north west,yshift=-5pt,xshift=10pt,text=white] at (frame.north west){\UbuntuClose~\UbuntuMin~\UbuntuMax};},
+        overlay first={
+            \node[inner sep=0pt,anchor=north west,yshift=-5pt,xshift=10pt,text=white] at (frame.north west){\UbuntuClose~\UbuntuMin~\UbuntuMax};}
+}}
+
+
+\DeclareTCBListing{GitExample}{ m m }{%
+    listing and comment,
+    colbacklower=tcbcolback!5!yellow!10!white,
+    collower=linux,
+    gitexample,
+    title={#2},
+    comment={\small\sffamily#1}}
+\DeclareTCBListing{GitExampla}{ m }{%
+    listing only,
+    gitexample,
+    title={#1}}
+
+\tcbset{skin=enhanced,
+    lang/.style={
+        breakable,drop shadow,listing engine=minted,minted style=trac,
+        minted options={breaklines,fontsize=\wuhao,linenos,
+            numbersep=3mm},
+        colback=blue!5!white,colframe=blue!75!black,
+        left=6mm,enhanced,title={#1},
+        colframe=tcbcolback!60!black,colback=tcbcolback!30!white,colbacktitle=tcbcolback!5!yellow!10!white,
+        fonttitle=\bfseries,coltitle=black,attach boxed title to top center=
+        {yshift=-0.25mm-\tcboxedtitleheight/2,yshifttext=2mm-\tcboxedtitleheight/2},
+        attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight},
+        varwidth boxed title*=-3cm,
+        boxed title style={frame code={
+                \path[fill=tcbcolback!30!black]
+                ([yshift=-1mm,xshift=-1mm]frame.north west)
+                arc[start angle=0,end angle=180,radius=1mm]
+                ([yshift=-1mm,xshift=1mm]frame.north east)
+                arc[start angle=180,end angle=0,radius=1mm];
+                \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black,
+                middle color=tcbcolback!80!black]
+                ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east)
+                [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+                -- (frame.south east) -- (frame.south west)
+                -- ([xshift=-1mm,yshift=-1mm]frame.north west)
+                [sharp corners]-- cycle;
+            },interior engine=empty,
+        },
+        overlay={\begin{tcbclipinterior}\fill[tcbcolback!80!black] (frame.south west)
+                rectangle ([xshift=5mm]frame.north west);\end{tcbclipinterior}}
+}}
+
+\DeclareTCBListing{langPyTwo}{ m m }{%
+    listing and comment,
+    colbacklower=tcbcolback!5!yellow!10!white,
+    collower=tcbcolback!60!black,
+    lang,
+    title={#2},
+    comment={\small\sffamily#1}}
+\DeclareTCBListing{langPyOne}{ m }{%
+    listing only,
+    lang,
+    title={#1}}
+
+
 % 发行日期
-\newcommand{\releasedate}{2023/5/23} 
+\newcommand{\releasedate}{2023/5/23}
 
 \title{计算机视觉轻松入门}
 \subtitle{基于Julia}
