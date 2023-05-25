@@ -103,9 +103,6 @@
 
 \RequirePackage{setspace}
 
-\RequirePackage{csquotes}
-
-
 \RequirePackage{hyperref}
 \hypersetup{
   breaklinks,
@@ -1642,3 +1639,6 @@
 
 % restore the tt default family to lmodern tt family
 \renewcommand\ttdefault{lmtt}
+
+\RequirePackage{csquotes}
+

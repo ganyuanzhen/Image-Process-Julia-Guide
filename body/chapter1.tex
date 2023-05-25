@@ -5,6 +5,7 @@
 Julia 是一个非常棒的科学计算语言。它像 R、MATLAB 和 Python 一样简单，在高级数值计算方面有丰富的表现力，并且支持通用编程。根据官网的描述，Julia是一门这样的语言\cite{Juliadevelopers2018}：
 
 \begin{itemize}
+    \tightlist
 	\item 快速：Julia一开始就是为高性能而设计的。Julia可以通过LLVM而跨平台被编译成高效的本地代码。
 	\item 通用：Julia使用多分派作为编程范式，使其更容易表达面向对象和函数式编程范式。标准库提供了异步I/O，进程控制，日志记录，性能分析，包管理器等等。
     \item 动态：Julia是动态类型的，与脚本语言类似，并且对交互式使用具有很好的支持。
@@ -16,6 +17,7 @@ Julia 是一个非常棒的科学计算语言。它像 R、MATLAB 和 Python 一
 简单来说，Julia与其他编程语言相比，有着如下的特点\cite{Julia2023}：
 
 \begin{itemize}
+    \tightlist
     \item 核心语言很小：标准库是用 Julia 自身写的，包括整数运算这样的基础运算
     \item 丰富的基础类型：既可用于定义和描述对象，也可用于做可选的类型标注
     \item 通过多重派发，可以根据类型的不同，来调用同名函数的不同实现
@@ -32,6 +34,7 @@ Julia 是一个非常棒的科学计算语言。它像 R、MATLAB 和 Python 一
 对于习惯命令行的用户而言，jill.py 是一个社区维护的全平台下一键安装 Julia 的命令行工具。
 
 \begin{itemize}
+    \tightlist
     \item 安装/更新 jill： pip install jill --user -U (需要 Python 3.6 或更新的版本)
 
     \item 安装 Julia：jill install [VERSION] [--upstream UPSTREAM] [--confirm]
@@ -68,19 +71,15 @@ Julia 是一个非常棒的科学计算语言。它像 R、MATLAB 和 Python 一
 Julia 语言中，变量是与某个值相关联（或绑定）的名字。你可以用它来保存一个值（例如某些计算得到的结果），供之后的代码使用。例如：
 
 \begin{GitExampla}{Julia@xubuntu:$\sim$}
-    # 将 10 赋值给变量 x
     julia> x = 10
     10
 
-    # 使用 x 的值做计算
     julia> x + 1
     11
 
-    # 重新给 x 赋值
     julia> x = 1 + 1
     2
 
-    # 也可以给 x 赋其它类型的值, 比如字符串文本
     julia> x = "Hello World!"
     "Hello World!"
 \end{GitExampla}
